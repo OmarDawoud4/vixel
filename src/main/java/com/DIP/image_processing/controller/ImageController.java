@@ -22,7 +22,8 @@ public class ImageController {
         this.imageProcessingService = imageProcessingService;
     }
 
-    @PostMapping(value = "/filter/invert", consumes = MediaType.MULTIPART_FORM_DATA_VALUE,
+    @PostMapping(value = "/filter/invert",
+            consumes = MediaType.MULTIPART_FORM_DATA_VALUE,
     produces = MediaType.IMAGE_PNG_VALUE)
     public ResponseEntity<byte[]> invertFilter(
             @RequestParam("image") MultipartFile imageFile)throws IOException {
@@ -34,5 +35,21 @@ public class ImageController {
 
 
     }
+
+    @PostMapping(value = "/filter/solarize",
+            consumes = MediaType.MULTIPART_FORM_DATA_VALUE,
+            produces = MediaType.IMAGE_PNG_VALUE
+    )
+    public ResponseEntity<byte[]> solarizeFilter(
+            @RequestParam("image") MultipartFile imageFile)throws IOException {
+
+        byte[] invertedimage = imageProcessingService.solarizeImage(imageFile);
+        return ResponseEntity.ok().
+                contentType(MediaType.IMAGE_PNG).
+                body(invertedimage);
+
+
+    }
+
 
 }
