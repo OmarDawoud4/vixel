@@ -67,4 +67,39 @@ public class ImageProcessingService {
         return component<128? 255-component:component;
 
     }
+
+    public byte[] clipImage(final MultipartFile imageFile)throws IOException {
+
+        BufferedImage originalImage= ImageIO.read(imageFile.getInputStream());
+        BufferedImage solarizedImage = new BufferedImage(originalImage.getWidth(),
+                originalImage.getHeight(),
+                BufferedImage.TYPE_INT_RGB
+        );
+
+        for(int x = 0; x < originalImage.getWidth(); x++){
+            for(int y = 0; y < originalImage.getHeight(); y++){
+                Color color = new Color(originalImage.getRGB(x, y));
+
+                int red  = clipComponent(color.getRed());
+                int green = clipComponent(color.getGreen());
+                int blue = clipComponent(color.getBlue());
+
+                Color newColor = new Color(red, green, blue);
+                solarizedImage.setRGB(x,y,newColor.getRGB());
+
+            }
+        }
+
+
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        ImageIO.write(solarizedImage, "png", out);
+        return out.toByteArray();
+
+    }
+
+    private int clipComponent(int component){
+
+        return Math.max(50,component);
+
+    }
 }

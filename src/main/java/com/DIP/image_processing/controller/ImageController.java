@@ -51,5 +51,20 @@ public class ImageController {
 
     }
 
+    @PostMapping(value = "/filter/clip",
+            consumes = MediaType.MULTIPART_FORM_DATA_VALUE,
+            produces = MediaType.IMAGE_PNG_VALUE
+    )
+    public ResponseEntity<byte[]> clipFilter(
+            @RequestParam("image") MultipartFile imageFile)throws IOException {
+
+        byte[] invertedimage = imageProcessingService.clipImage(imageFile);
+        return ResponseEntity.ok().
+                contentType(MediaType.IMAGE_PNG).
+                body(invertedimage);
+
+
+    }
+
 
 }
